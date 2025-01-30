@@ -89,4 +89,22 @@ public class CartController {
         cartService.removeFromCart(cartItemId);
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/updateQuantity/{cartItemId}")
+    public ResponseEntity<?> updateCartItemQuantity(
+            @PathVariable Long cartItemId,
+            @RequestParam int quantity) {
+        try {
+            Cart updatedCart = cartService.updateCartItemQuantity(cartItemId, quantity);
+            return ResponseEntity.ok(new CartDTO(
+                    updatedCart.getId(),
+                    updatedCart.getProduct().getId(),
+                    updatedCart.getUser().getId(),
+                    updatedCart.getProduct().getName(),
+                    updatedCart.getQuantity()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to update quantity");
+        }
+    }
 }
